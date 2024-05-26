@@ -1,26 +1,89 @@
-#  Как работать с репозиторием финального задания
+# Kittygram :cat2:
+_Kittygram_ — сайт, на котором пользователи могут публиковать своих кошек, их фото и цвет. Есть возможность добавлять достижения своих кошек и просматривать ленту котов на главной странице сайта.
 
-## Что нужно сделать
+## Содержимое
+* [Локальный запуск](#локальный-запуск)
+* [Технологии](#технологии)
+* [Автор](#автор)
 
-Настроить запуск проекта Kittygram в контейнерах и CI/CD с помощью GitHub Actions
 
-## Как проверить работу с помощью автотестов
+## Локальный запуск:
 
-В корне репозитория создайте файл tests.yml со следующим содержимым:
-```yaml
-repo_owner: ваш_логин_на_гитхабе
-kittygram_domain: полная ссылка (https://доменное_имя) на ваш проект Kittygram
-taski_domain: полная ссылка (https://доменное_имя) на ваш проект Taski
-dockerhub_username: ваш_логин_на_докерхабе
+
+Клонировать репозиторий и перейти в него в командной строке:
+
+```
+git clone 
 ```
 
-Скопируйте содержимое файла `.github/workflows/main.yml` в файл `kittygram_workflow.yml` в корневой директории проекта.
+```
+cd cat_charity_fund
+```
 
-Для локального запуска тестов создайте виртуальное окружение, установите в него зависимости из backend/requirements.txt и запустите в корневой директории проекта `pytest`.
+Cоздать и активировать виртуальное окружение:
 
-## Чек-лист для проверки перед отправкой задания
+```
+python3 -m venv venv
+```
 
-- Проект Taski доступен по доменному имени, указанному в `tests.yml`.
-- Проект Kittygram доступен по доменному имени, указанному в `tests.yml`.
-- Пуш в ветку main запускает тестирование и деплой Kittygram, а после успешного деплоя вам приходит сообщение в телеграм.
-- В корне проекта есть файл `kittygram_workflow.yml`.
+* Если у вас Linux/macOS
+
+    ```
+    source venv/bin/activate
+    ```
+
+* Если у вас windows
+
+    ```
+    source venv/scripts/activate
+    ```
+
+Установить зависимости из файла requirements.txt:
+
+```
+python3 -m pip install --upgrade pip
+```
+
+```
+pip install -r requirements.txt
+```
+
+Запустить проект в контейнерах через docker compose:
+
+```
+docker compose -f docker-compose-kittygram.production.yml up -d
+```
+
+```
+docker compose -f docker-compose-kittygram.production.yml exec backend python manage.py migrate
+```
+
+```
+docker compose -f docker-compose-kittygram.production.yml exec backend python manage.py collectstatic
+```
+
+```
+docker compose -f docker-compose-kittygram.production.yml exec backend cp -r /app/collected_static/. /backend_static/static/
+```
+
+Локально проект вы можете открыть:
+
+```
+http://127.0.0.1:9000/
+```
+
+## Технологии:
+- Python 3.9
+- Django 3.2.3
+- Pillow 9.0.0
+- DRF 3.12.4
+- Djoser 2.1.0
+- Gunicorn 20.1.0
+- PostgreSQL
+- Nginx
+- Docker compose
+
+## Автор
+* [Макаров Пётр](https://github.com/MakarovPetr2004)
+
+
